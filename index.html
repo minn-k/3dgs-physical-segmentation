@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="googlebot" content="noindex, nofollow">
 <title>물리 단위 분할 · 연구 제안</title>
-<meta name="description" content="시뮬레이션으로 검증하는 3DGS 물체 분해 — 연구 제안 초안">
+<meta name="description" content="상호작용 관찰을 이용한 3DGS 장면의 물리 단위 분할 (연구 제안 초안)">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
@@ -126,7 +126,7 @@ footer a { margin-right: 14px; }
   <a href="#landscape">2. 연구 지형</a>
   <a href="#problem">3. 문제 정의</a>
   <a href="#method">4. 방법</a>
-  <a href="#why-sim">5. 왜 시뮬레이션인가</a>
+  <a href="#why-sim">5. 궤적 군집과의 차이</a>
   <a href="#contrib">6. 기여와 차이</a>
   <a href="#eval">7. 평가 설계</a>
   <a href="#plan">8. 진행 계획</a>
@@ -139,18 +139,18 @@ footer a { margin-right: 14px; }
 
 <main>
 <header class="hero" id="top">
-  <p class="eyebrow">RESEARCH PROPOSAL · 3DGS × PHYSICAL AI</p>
-  <h1>보이는 물체가 아니라<br>같이 움직이는 몸으로 나눈다</h1>
-  <p class="lede">3DGS 장면을 physical AI가 쓰려면 "보이는 물체"가 아니라 "같이 움직이는 몸" 단위로 나눠야 한다.
-    지금의 sim-ready 연구는 모두 시각적 분할을 고정 입력으로 받기 때문에, 분할이 물리적으로 틀려도 고칠 수단이 없다.
-    이 연구는 물체 분할을 가설로 두고, 짧은 상호작용 관찰을 시뮬레이션과 렌더링으로 재현해 그 관찰을 가장 잘 설명하는 분해를 고른다.</p>
+  <p class="eyebrow">연구 제안 (초안)</p>
+  <h1>상호작용 관찰을 이용한<br>3DGS 장면의 물리 단위 분할</h1>
+  <p class="lede">3DGS 장면을 물리 시뮬레이션이나 로봇 조작에 쓰려면, 장면을 함께 움직이는 단위(강체, 부착된 부품 등)로 나눠야 한다.
+    기존 sim-ready 연구는 시각적 분할 결과를 고정된 입력으로 사용하므로, 분할이 물리적으로 맞지 않을 때 이를 바로잡는 단계가 없다.
+    본 연구는 분할 후보를 가설로 두고, 짧은 상호작용 관찰을 시뮬레이션과 렌더링으로 재현하여 관찰과 가장 일치하는 분할을 선택하는 방법을 제안한다.</p>
   <p class="meta">권상민 · 2026년 10월 · 초안 (선행 연구는 2026년 9월 arXiv까지 확인)</p>
 </header>
 
 <div class="glance">
-  <div class="card"><h3>문제</h3><p>시각 단위와 물리 단위가 다르다. 손잡이가 따로 잡히거나 컵과 받침이 합쳐지면 시뮬레이션이 틀린다.</p></div>
-  <div class="card"><h3>방법</h3><p>분할을 가설로 두고, 관찰된 상호작용을 시뮬레이션·렌더링으로 재현해 가장 잘 맞는 가설을 고른다.</p></div>
-  <div class="card"><h3>기여</h3><p>분할이 고정 입력에서 검증되는 변수가 된다. 라벨이 아니라 물리적 결과로 재는 지표를 함께 낸다.</p></div>
+  <div class="card"><h3>문제</h3><p>시각적 분할 단위와 물리적으로 함께 움직이는 단위가 다르다. 손잡이가 따로 분할되거나 컵과 받침이 하나로 묶이면 시뮬레이션 결과가 틀어진다.</p></div>
+  <div class="card"><h3>방법</h3><p>분할 후보를 가설로 두고, 관찰된 상호작용을 시뮬레이션·렌더링으로 재현해 가장 잘 맞는 가설을 선택한다.</p></div>
+  <div class="card"><h3>기여</h3><p>분할을 물리적 관찰로 검증·수정하는 절차와, 분할을 물리적 결과로 평가하는 지표를 제시한다.</p></div>
 </div>
 
 <section id="start">
@@ -162,7 +162,7 @@ footer a { margin-right: 14px; }
     <li><b>이후 단계는 분할을 고치지 않는다</b>: 물성 부여, 가려진 면 완성, sim-ready 장면 조립 모두 분할 결과를 입력으로 받는다.</li>
     <li><b>물리적 역할은 사람이 정한다</b>: 3DGS 물리 연구에서는 고정 영역 같은 경계 조건을 박스로 직접 지정하는 경우가 많다.</li>
   </ul>
-  <p>분할이 물리 결과를 좌우하는데, 그 분할은 겉모습 기준이거나 사람이 정한다. "3DGS + 물체 단위 분할 → physical AI"에서 비어 있는 곳이 바로 여기라고 본다.</p>
+  <p>즉, 분할 결과가 시뮬레이션 결과를 좌우하지만 분할 자체는 시각적 기준이나 수작업으로 정해진다. 본 연구는 이 부분을 다룬다.</p>
 </section>
 
 <section id="landscape">
@@ -198,7 +198,7 @@ footer a { margin-right: 14px; }
 <section id="problem">
   <h2><span class="num">3</span>문제 정의</h2>
   <p class="point"><b>물리 단위</b>는 상호작용을 받을 때 한 몸처럼 같이 움직이는 가우시안들의 가장 큰 집합이다.
-    단위 사이에는 고정 부착, 접촉·지지, 독립 중 하나의 관계가 있고, 환경에 붙은 단위는 정적이다. 시뮬레이터에 필요한 것은 의미 라벨이 아니라 이 단위와 관계다.</p>
+    단위 사이에는 고정 부착, 접촉·지지, 독립 중 하나의 관계가 있고, 환경에 붙은 단위는 정적이다. 시뮬레이터가 필요로 하는 정보는 이 단위와 관계다.</p>
   <p>시각 단위와 물리 단위는 세 가지 방식으로 어긋난다.</p>
   <div class="table-wrap"><table>
     <thead><tr><th>어긋남</th><th>예</th><th>시뮬레이션에서 생기는 일</th></tr></thead>
@@ -208,21 +208,21 @@ footer a { margin-right: 14px; }
       <tr><td>고정 누락·과잉</td><td>벽에 걸린 액자, 화분에 심긴 줄기</td><td>액자가 떨어지거나, 고정된 부분이 잘린 면처럼 보임</td></tr>
     </tbody>
   </table></div>
-  <p><b>기존 지표는 이 오류를 못 본다.</b> 분할은 보통 촬영한 시점에서 2D mIoU로 잰다. 그런데 위 오류는 대부분 접촉면과 가려진 곳에 있어서, 물체를 움직여야 드러난다.</p>
-  <p><b>정지 관찰만으로는 원리적으로 구분할 수 없다.</b> 다리 위에 얹힌 의자 좌판과 붙어 있는 좌판은 멈춰 있을 때 똑같이 보인다. 밀거나 들어 봐야 알 수 있다.
-    그래서 이 문제는 상호작용이 인식의 일부가 되는 physical AI 문제다.</p>
+  <p><b>기존 평가 지표로는 이 오류가 잘 드러나지 않는다.</b> 분할은 보통 촬영 시점에서 2D mIoU로 평가한다. 위 오류는 대부분 접촉면과 가려진 영역에서 생기므로, 물체를 움직였을 때 비로소 나타난다.</p>
+  <p><b>정지 상태의 관찰만으로는 구분할 수 없는 경우가 있다.</b> 다리 위에 얹혀 있는 의자 좌판과 고정된 좌판은 정지 상태에서 같게 보이며, 밀거나 들어 올려야 구분된다.
+    따라서 분할에 상호작용 관찰을 활용할 필요가 있다.</p>
 </section>
 
 <section id="method">
   <h2><span class="num">4</span>방법: 시뮬레이션으로 분할 고르기</h2>
-  <p class="point">분할을 가설로 두고, 관찰된 상호작용을 가장 잘 재현하는 가설을 고른다 (segmentation-by-simulation).
+  <p class="point">분할 후보를 가설로 두고, 관찰된 상호작용을 가장 잘 재현하는 가설을 선택한다 (segmentation-by-simulation).
     입력은 3DGS 장면 하나와 짧은 상호작용 관찰이다. 상호작용 관찰은 물체 몇 개를 손으로 밀거나 든 뒤의 전후 촬영, 또는 그 과정의 짧은 영상이다.</p>
 
   <figure class="diagram">
-    <svg viewBox="0 0 760 544" role="img" aria-label="관찰된 상호작용을 가장 잘 재현하는 분할 가설을 고른다" font-size="12.5" font-family="Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif">
+    <svg viewBox="0 0 760 544" role="img" aria-label="방법 개요" font-size="12.5" font-family="Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif">
       <defs><marker id="seg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--ink3)"/></marker></defs>
-      <text x="24" y="30" font-size="15" font-weight="600" fill="var(--ink)">관찰된 상호작용을 가장 잘 재현하는 분할 가설을 고른다</text>
-      <text x="24" y="50" font-size="11.5" fill="var(--ink3)">③이 핵심 기여, ①은 탐색 공간을 줄이는 기존 기법</text>
+      <text x="24" y="30" font-size="15" font-weight="600" fill="var(--ink)">방법 개요</text>
+      <text x="24" y="50" font-size="11.5" fill="var(--ink3)">③이 주된 기여이며, ①은 탐색 공간을 줄이기 위한 기존 기법이다</text>
       <g fill="none" stroke="var(--ink3)" stroke-width="1.25">
         <path d="M240 108V132" marker-end="url(#seg-arrow)"/><path d="M240 204V232" marker-end="url(#seg-arrow)"/>
         <path d="M240 304V332" marker-end="url(#seg-arrow)"/><path d="M240 420V448" marker-end="url(#seg-arrow)"/>
@@ -259,7 +259,7 @@ footer a { margin-right: 14px; }
 
   <ol>
     <li><b>후보 만들기</b>: 다중 스케일 3DGS 분할(SAGA·GARField 방식)로 병합 트리를 만든다. 트리를 자르는 위치와 이웃 단위 사이의 관계 라벨을 합친 것이 가설 H다.
-      VLM은 "손잡이는 서랍에 붙어 있다" 같은 상식으로 가설에 사전 확률을 준다. 이 단계는 기여가 아니라 탐색 공간을 줄이는 역할이다.</li>
+      VLM은 "손잡이는 서랍에 붙어 있다" 같은 상식으로 가설에 사전 확률을 준다. 이 단계는 탐색 공간을 줄이기 위한 것으로, 기여에는 포함하지 않는다.</li>
     <li><b>정지 상태로 가지치기</b>: 따로 떼면 접촉만으로 버틸 수 없는 가설은 짧은 중력 시뮬레이션으로 걸러내고 부착이나 융합으로 바꾼다.</li>
     <li><b>상호작용으로 검증 (핵심)</b>: 남은 가설마다 관찰된 행동을 시뮬레이터에서 다시 한다. 손이 닿은 단위는 관찰된 궤적을 따라 움직인다.
       나머지는 가설의 관계에 따라 따라가거나(부착), 마찰로 끌려가거나(접촉), 그대로 있다(독립·정적). 결과를 3DGS로 렌더링해 관찰과 비교한다.</li>
@@ -278,21 +278,20 @@ footer a { margin-right: 14px; }
 </section>
 
 <section id="why-sim">
-  <h2><span class="num">5</span>왜 궤적 군집이 아니라 시뮬레이션인가</h2>
-  <p class="point">군집은 관찰을 라벨로 바꾸고, 시뮬레이션은 관찰을 설명하는 모델을 만든다.
-    움직임이 관찰되면 궤적이 비슷한 가우시안끼리 묶는 것(SplArt, DeGSS, MotionBits 방식)만으로 충분해 보이지만, 세 가지가 다르다.</p>
+  <h2><span class="num">5</span>궤적 군집과의 차이</h2>
+  <p class="point">움직임이 관찰되면 궤적이 비슷한 가우시안끼리 묶는 방법(SplArt, DeGSS, MotionBits)으로도 분할할 수 있다. 시뮬레이션 기반 검증은 이 방법과 다음 세 가지 점에서 다르다.</p>
   <ul>
-    <li><b>같이 움직였다고 한 몸은 아니다.</b> 아래 책을 밀면 위 책도 마찰로 같이 움직인다. 군집은 둘을 한 몸으로 묶는다.
-      시뮬레이션은 "접촉" 가설도 같은 관찰을 설명한다는 것을 알고, 사전으로 동률을 깨거나 두 가설을 가르는 다음 행동(위 책 들기)을 제안한다.</li>
-    <li><b>예측으로 검증할 수 있다.</b> 시뮬레이션으로 고른 분할은 보지 않은 다른 상호작용의 결과도 예측해야 한다. 그래서 "라벨이 정답과 같은가"가 아니라 "물리적으로 맞는가"를 잴 수 있다.</li>
-    <li><b>결과가 바로 시뮬레이터 자산이다.</b> 군집 라벨은 관계와 조인트로 다시 바꾸는 단계가 따로 필요하다.</li>
+    <li><b>접촉과 부착을 구분한다.</b> 아래 책을 밀면 위 책도 마찰 때문에 함께 움직인다. 궤적 군집은 두 책을 하나로 묶지만, 시뮬레이션에서는 "접촉" 가설도 같은 관찰을 설명할 수 있음을 확인할 수 있다.
+      이 경우 사전 확률로 선택하거나, 두 가설을 구분할 수 있는 다음 행동(위 책 들기)을 제안한다.</li>
+    <li><b>관찰하지 않은 상호작용으로 검증할 수 있다.</b> 선택된 분할로 다른 상호작용의 결과를 예측할 수 있으므로, 라벨 일치도 외에 물리적 타당성을 평가할 수 있다.</li>
+    <li><b>결과를 시뮬레이터에서 바로 사용할 수 있다.</b> 궤적 군집의 결과는 라벨이므로, 관계와 조인트로 변환하는 단계가 따로 필요하다.</li>
   </ul>
-  <p>궤적 군집은 가장 강한 비교 대상으로 평가에 넣는다.</p>
+  <p>궤적 군집은 주요 비교 대상으로 실험에 포함한다.</p>
 </section>
 
 <section id="contrib">
   <h2><span class="num">6</span>기여와 선행 연구 대비 차이</h2>
-  <p class="point">핵심 기여는 분할을 고정 입력이 아니라 물리로 검증하는 변수로 바꾼 것이다.</p>
+  <p class="point">기존 연구에서 고정 입력으로 쓰이던 분할을, 물리적 관찰로 검증하고 수정하는 대상으로 다룬다는 점이 주된 기여다.</p>
   <ol>
     <li><b>문제 정의와 평가</b>: 물리 단위 분할을 상호작용 결과로 정의한다. 이를 재는 지표(잡아 들기 일치도, 보지 않은 상호작용 예측)와 정답이 있는 합성 벤치마크를 만든다.</li>
     <li><b>방법</b>: 분할 가설을 시뮬레이션과 렌더링으로 검증하는 segmentation-by-simulation. 자유도 벌점과 사전으로 식별성 문제를 다룬다.</li>
@@ -314,7 +313,7 @@ footer a { margin-right: 14px; }
 
 <section id="eval">
   <h2><span class="num">7</span>평가 설계</h2>
-  <p class="point">분할을 라벨 일치가 아니라 물리적 결과로 잰다. 이 지표 자체가 기여의 일부다.</p>
+  <p class="point">기존 2D mIoU에 더해, 분할을 물리적 결과로 평가하는 지표를 사용한다. 이 지표 설계도 기여에 포함된다.</p>
   <p><b>데이터</b></p>
   <ul>
     <li><b>합성</b>: 물리 시뮬레이터로 만든 탁상 장면. PartNet-Mobility와 <a href="https://arxiv.org/abs/2507.12465">PhysXNet</a> 자산으로 정답 몸·조인트를 두고, 사실적으로 렌더링해 3DGS를 학습한다. 상호작용도 정답 장면에서 시뮬레이션해 만든다.</li>
@@ -327,7 +326,7 @@ footer a { margin-right: 14px; }
       <tr><td>단위 일치도</td><td>분할이 정답 몸과 얼마나 일치하는가</td><td>표준 비교</td></tr>
       <tr><td>관계 정확도</td><td>부착·접촉·독립·정적 분류</td><td>시뮬레이터가 쓰는 정보</td></tr>
       <tr><td>잡아 들기 일치도</td><td>한 점을 잡아 들 때 따라오는 가우시안 집합과 정답의 IoU</td><td>과분할·과소분할·고정 오류를 한 번에 잡음</td></tr>
-      <tr><td>보지 않은 상호작용 예측</td><td>상호작용 A로 정한 분할로 B의 결과를 예측한 오차</td><td>라벨이 아니라 모델이 맞는지 확인</td></tr>
+      <tr><td>보지 않은 상호작용 예측</td><td>상호작용 A로 정한 분할로 B의 결과를 예측한 오차</td><td>분할이 새로운 상호작용에도 맞는지 확인</td></tr>
       <tr><td>로봇 과제 성공률</td><td>시뮬레이터에서 손잡이로 머그 들기, 컵만 옮기기, 화분 들기</td><td>실제 쓸모</td></tr>
     </tbody>
   </table></div>
@@ -336,7 +335,7 @@ footer a { margin-right: 14px; }
 
 <section id="plan">
   <h2><span class="num">8</span>진행 계획</h2>
-  <p class="point">첫 단계는 방법이 아니라 "문제가 실제로 있다"는 수치다. 기간은 예상치이고, 파일럿은 아직 돌리지 않았다.</p>
+  <p class="point">첫 단계에서는 기존 분할 방법이 실제로 물리적 오류를 얼마나 만드는지 먼저 측정한다. 기간은 예상치이며, 파일럿 실험은 아직 수행하지 않았다.</p>
   <ol>
     <li><b>파일럿 (2~3주)</b>: 시뮬레이터 장면 5~10개(손잡이 머그, 쌓인 책, 컵과 받침, 화분 식물, 벽 부착물)를 만든다. Gaussian Grouping·SAGA로 분할한 조각을 각각 강체로 올리고, 잡아 들기 실패율을 잰다.</li>
     <li><b>정지 단계 (약 1개월)</b>: 병합 트리 후보, VLM 사전, 안정성 가지치기를 만들고 합성 장면에서 단위·관계 정확도를 잰다.</li>
@@ -372,11 +371,11 @@ footer a { margin-right: 14px; }
     <dt>움직임이 있으면 궤적 군집으로 끝나지 않나?</dt>
     <dd>군집은 마찰로 끌려간 것과 붙어서 같이 움직인 것을 가르지 못하고, 새 상호작용을 예측하지 못한다. 군집은 비교 대상으로 넣는다.</dd>
     <dt>HoloScene·SimRecon과 무엇이 다른가?</dt>
-    <dd>그들은 분할을 고정하고 자세·형상을 고친다. 이 연구는 분할 자체를 고친다. 두 작업은 서로 이어 붙일 수 있다.</dd>
+    <dd>해당 연구들은 분할을 고정한 채 자세와 형상을 보정한다. 본 연구는 분할 자체를 보정하며, 두 접근은 함께 사용할 수 있다.</dd>
     <dt>로봇 없이 가능한가?</dt>
     <dd>사람 손으로 한 상호작용을 전후로 촬영하고, 시뮬레이터에서 합성 실험을 한다. 로봇이 어디를 건드릴지 스스로 고르는 능동 선택은 로봇이 있을 때의 확장이다.</dd>
     <dt>왜 그래픽스 연구인가?</dt>
-    <dd>핵심 비용이 "가설 수 × 시뮬레이션 × 렌더링"을 GPU에서 처리하는 양이고, 관찰과 비교하는 분석-합성은 렌더링 문제다.</dd>
+    <dd>가설마다 시뮬레이션과 렌더링을 반복하므로 GPU 기반 시뮬레이션·렌더링의 효율이 중요하고, 관찰과 비교하는 분석-합성 과정은 렌더링 문제와 직결된다.</dd>
     <dt>diffusion 같은 학습 방법은 왜 안 쓰나?</dt>
     <dd>장면 수준 물리 분할 정답 데이터가 거의 없다. 먼저 병합 트리 후보로 충분한지 확인하고, 부족한 사례가 쌓이면 학습된 후보 제안기로 넣는다.</dd>
   </dl>
@@ -387,7 +386,7 @@ footer a { margin-right: 14px; }
   <p class="point">첫 논문의 "분할 가설 + 물리 검증" 틀을 그대로 두고, 아래 방향으로 넓힌다.</p>
   <ul>
     <li><b>능동 상호작용</b>: 모호한 가설을 가장 잘 가르는 행동(밀기, 당기기, 들기)을 로봇이 스스로 고른다.</li>
-    <li><b>불확실성 유지</b>: 단일 분할 대신 여러 가설을 확률과 함께 들고 있는 "물리적 믿음 상태"로 3DGS를 쓴다.</li>
+    <li><b>불확실성 유지</b>: 단일 분할 대신 여러 가설을 확률과 함께 유지하는 표현으로 확장한다.</li>
     <li><b>과제별 분할</b>: 옮기기, 잡기, 변형 등 과제에 따라 필요한 단위가 다르다는 점을 다룬다.</li>
     <li><b>변형체와 재질</b>: 변형 결합 관계를 넣고 KnockGS·PhysReal 같은 물성 추정과 합친다. sim-ready 연구 대부분이 강체만 다루므로 이 확장 자체가 차별점이 된다.</li>
     <li><b>학습된 후보 제안기</b>: 병합 트리에 정답이 없는 사례가 쌓이면 diffusion 같은 생성 사전을 후보 제안기로 넣는다. 검증은 여전히 시뮬레이션이 맡는다.</li>
@@ -408,14 +407,14 @@ footer a { margin-right: 14px; }
   <p class="note">본문 표에 없는 논문만 적는다. 모두 2026년 10월에 검색으로 존재와 요지를 확인했고, 인용 전에 원문을 다시 읽어야 한다.</p>
   <ul class="refs">
     <li><a href="https://arxiv.org/abs/2312.00860">Segment Any 3D Gaussians (SAGA)</a></li>
-    <li><a href="https://arxiv.org/abs/2603.06846">MotionBits</a> — 2D 비디오에서 강체 운동 단위 분할, MoRiBo 벤치마크</li>
-    <li><a href="https://arxiv.org/abs/2608.27365">KnockGS</a> — 상호작용 응답으로 탄성·밀도 보정</li>
-    <li><a href="https://arxiv.org/abs/2411.03706">3DGS-CD</a> — 재배치 전후 변화 감지</li>
-    <li><a href="https://arxiv.org/abs/2507.12465">PhysX-3D / PhysXNet</a> — 파트 단위 물리 주석 데이터</li>
-    <li><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Zhang_IAAO_Interactive_Affordance_Learning_for_Articulated_Objects_in_3D_Environments_CVPR_2025_paper.html">IAAO (CVPR'25)</a> — 상호작용을 통한 관절 물체 이해</li>
-    <li><a href="https://arxiv.org/abs/2403.01731">RISeg</a> — 로봇이 밀어서 하는 2D 분할</li>
-    <li><a href="https://openaccess.thecvf.com/content/ICCV2025/papers/Kreber_Guiding_Diffusion-Based_Articulated_Object_Generation_by_Partial_Point_Cloud_Alignment_ICCV_2025_paper.pdf">Kreber et al. (ICCV'25)</a> — 관찰에 맞춘 diffusion 관절 물체 생성</li>
-    <li><a href="https://arxiv.org/abs/2606.03994">SimuScene</a> — 단일 이미지, 물리 엔진을 진단 도구로 사용</li>
+    <li><a href="https://arxiv.org/abs/2603.06846">MotionBits</a>: 2D 비디오에서 강체 운동 단위 분할, MoRiBo 벤치마크</li>
+    <li><a href="https://arxiv.org/abs/2608.27365">KnockGS</a>: 상호작용 응답으로 탄성·밀도 보정</li>
+    <li><a href="https://arxiv.org/abs/2411.03706">3DGS-CD</a>: 재배치 전후 변화 감지</li>
+    <li><a href="https://arxiv.org/abs/2507.12465">PhysX-3D / PhysXNet</a>: 파트 단위 물리 주석 데이터</li>
+    <li><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Zhang_IAAO_Interactive_Affordance_Learning_for_Articulated_Objects_in_3D_Environments_CVPR_2025_paper.html">IAAO (CVPR'25)</a>: 상호작용을 통한 관절 물체 이해</li>
+    <li><a href="https://arxiv.org/abs/2403.01731">RISeg</a>: 로봇이 밀어서 하는 2D 분할</li>
+    <li><a href="https://openaccess.thecvf.com/content/ICCV2025/papers/Kreber_Guiding_Diffusion-Based_Articulated_Object_Generation_by_Partial_Point_Cloud_Alignment_ICCV_2025_paper.pdf">Kreber et al. (ICCV'25)</a>: 관찰에 맞춘 diffusion 관절 물체 생성</li>
+    <li><a href="https://arxiv.org/abs/2606.03994">SimuScene</a>: 단일 이미지, 물리 엔진을 진단 도구로 사용</li>
   </ul>
 </section>
 </main>
