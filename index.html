@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <meta name="googlebot" content="noindex, nofollow">
-<title>물리 단위 분할 · 연구 제안</title>
-<meta name="description" content="상호작용 관찰을 이용한 3DGS 장면의 물리 단위 분할 (연구 제안 초안)">
+<title>Physical Segmentation · 연구 제안</title>
+<meta name="description" content="시뮬레이션 기반 3DGS 장면의 Physical Segmentation (연구 제안 초안)">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
@@ -114,7 +114,7 @@ footer a { margin-right: 14px; }
     <a class="brand" href="#top">Sangmin Kwon</a>
     <div class="links">
       <a href="#problem">문제</a><a href="#method">방법</a><a href="#contrib">기여</a>
-      <a href="#eval">평가</a><a href="#plan">계획</a><a href="#refs">출처</a>
+      <a href="#eval">실험</a><a href="#plan">계획</a><a href="#refs">참고 문헌</a>
     </div>
   </div>
 </nav>
@@ -122,299 +122,299 @@ footer a { margin-right: 14px; }
 <div class="layout">
 <aside class="toc">
   <p>목차</p>
-  <a href="#start">1. 동기</a>
-  <a href="#landscape">2. 연구 지형</a>
+  <a href="#start">1. 연구 동기</a>
+  <a href="#landscape">2. 관련 연구</a>
   <a href="#problem">3. 문제 정의</a>
-  <a href="#method">4. 방법</a>
-  <a href="#why-sim">5. 궤적 군집과의 차이</a>
-  <a href="#contrib">6. 기여와 차이</a>
-  <a href="#eval">7. 평가 설계</a>
-  <a href="#plan">8. 진행 계획</a>
-  <a href="#risks">9. 위험과 대응</a>
-  <a href="#faq">10. 자주 받는 질문</a>
-  <a href="#roadmap">11. 로드맵</a>
-  <a href="#open">12. 논의하고 싶은 점</a>
-  <a href="#refs">출처</a>
+  <a href="#method">4. 제안 방법</a>
+  <a href="#why-sim">5. Trajectory clustering과의 차이</a>
+  <a href="#contrib">6. 기여</a>
+  <a href="#eval">7. 실험 설계</a>
+  <a href="#plan">8. 연구 계획</a>
+  <a href="#risks">9. 위험 요소</a>
+  <a href="#faq">10. FAQ</a>
+  <a href="#roadmap">11. 향후 연구</a>
+  <a href="#open">12. 논의 사항</a>
+  <a href="#refs">참고 문헌</a>
 </aside>
 
 <main>
 <header class="hero" id="top">
   <p class="eyebrow">연구 제안 (초안)</p>
-  <h1>상호작용 관찰을 이용한<br>3DGS 장면의 물리 단위 분할</h1>
-  <p class="lede">3DGS 장면을 물리 시뮬레이션이나 로봇 조작에 쓰려면, 장면을 함께 움직이는 단위(강체, 부착된 부품 등)로 나눠야 한다.
-    기존 sim-ready 연구는 시각적 분할 결과를 고정된 입력으로 사용하므로, 분할이 물리적으로 맞지 않을 때 이를 바로잡는 단계가 없다.
-    본 연구는 분할 후보를 가설로 두고, 짧은 상호작용 관찰을 시뮬레이션과 렌더링으로 재현하여 관찰과 가장 일치하는 분할을 선택하는 방법을 제안한다.</p>
-  <p class="meta">권상민 · 2026년 10월 · 초안 (선행 연구는 2026년 9월 arXiv까지 확인)</p>
+  <h1>시뮬레이션 기반 3DGS 장면의<br>Physical Segmentation</h1>
+  <p class="lede">3DGS 장면을 물리 시뮬레이션이나 robot manipulation에 쓰려면, 장면을 실제로 함께 움직이는 단위(physical unit)로 segmentation해야 한다.
+    기존 sim-ready 연구들은 SAM 기반의 시각적 segmentation 결과를 고정된 입력으로 사용하기 때문에, segmentation이 물리적으로 맞지 않아도 이를 바로잡는 단계가 없다.
+    본 연구는 segmentation 후보를 가설로 두고, 짧은 상호작용을 시뮬레이션으로 재현해 실제 관찰과 가장 잘 맞는 segmentation을 선택하는 방법을 제안한다.</p>
+  <p class="meta">권상민 · 2026년 10월 · 초안 (관련 연구는 2026년 9월 arXiv까지 확인)</p>
 </header>
 
 <div class="glance">
-  <div class="card"><h3>문제</h3><p>시각적 분할 단위와 물리적으로 함께 움직이는 단위가 다르다. 손잡이가 따로 분할되거나 컵과 받침이 하나로 묶이면 시뮬레이션 결과가 틀어진다.</p></div>
-  <div class="card"><h3>방법</h3><p>분할 후보를 가설로 두고, 관찰된 상호작용을 시뮬레이션·렌더링으로 재현해 가장 잘 맞는 가설을 선택한다.</p></div>
-  <div class="card"><h3>기여</h3><p>분할을 물리적 관찰로 검증·수정하는 절차와, 분할을 물리적 결과로 평가하는 지표를 제시한다.</p></div>
+  <div class="card"><h3>문제</h3><p>시각적 segment와 실제로 함께 움직이는 단위가 다르다. 손잡이가 따로 잡히거나(over-segmentation) 컵과 받침이 하나로 묶이면(under-segmentation) 시뮬레이션 결과가 틀어진다.</p></div>
+  <div class="card"><h3>방법</h3><p>Segmentation 후보를 가설로 두고, 관찰된 상호작용을 시뮬레이션·렌더링으로 재현해 가장 잘 맞는 가설을 선택한다.</p></div>
+  <div class="card"><h3>기여</h3><p>Segmentation을 물리적으로 검증·수정하는 절차와, 이를 물리적 결과로 평가하는 지표를 제시한다.</p></div>
 </div>
 
 <section id="start">
-  <h2><span class="num">1</span>동기</h2>
-  <p class="point">3DGS 장면을 물체 단위로 나누고, 물성을 붙이고, 시뮬레이터에 넣어 로봇이 다루게 하는 연구가 빠르게 늘고 있다.
-    이 흐름에서 물체 분할은 거의 항상 첫 단계이고, 그 결과는 이후 모든 단계의 전제가 된다.</p>
+  <h2><span class="num">1</span>연구 동기</h2>
+  <p class="point">3DGS 장면을 물체 단위로 나누고, physical property를 부여하고, 시뮬레이터에 넣어 로봇이 다루게 하는 연구가 빠르게 늘고 있다.
+    이 pipeline에서 object segmentation은 거의 항상 첫 단계이고, 그 결과가 이후 모든 단계의 전제가 된다.</p>
   <ul>
-    <li><b>분할의 기준은 겉모습이다</b>: 대부분 SAM 같은 2D 분할 마스크를 3D 가우시안으로 올린다.</li>
-    <li><b>이후 단계는 분할을 고치지 않는다</b>: 물성 부여, 가려진 면 완성, sim-ready 장면 조립 모두 분할 결과를 입력으로 받는다.</li>
-    <li><b>물리적 역할은 사람이 정한다</b>: 3DGS 물리 연구에서는 고정 영역 같은 경계 조건을 박스로 직접 지정하는 경우가 많다.</li>
+    <li><b>Segmentation 기준이 appearance다</b>: 대부분 SAM 같은 2D mask를 3D Gaussian으로 lifting한다.</li>
+    <li><b>이후 단계에서 segmentation을 수정하지 않는다</b>: physical property 추정, amodal completion, sim-ready scene 구성 모두 segmentation 결과를 그대로 입력으로 쓴다.</li>
+    <li><b>물리적 역할은 사람이 지정한다</b>: 3DGS 물리 연구에서는 고정 영역 같은 boundary condition을 bounding box로 직접 지정하는 경우가 많다.</li>
   </ul>
-  <p>즉, 분할 결과가 시뮬레이션 결과를 좌우하지만 분할 자체는 시각적 기준이나 수작업으로 정해진다. 본 연구는 이 부분을 다룬다.</p>
+  <p>즉, segmentation이 시뮬레이션 결과를 좌우하지만 segmentation 자체는 appearance 기준이거나 수작업으로 정해진다. 본 연구는 이 부분을 다룬다.</p>
 </section>
 
 <section id="landscape">
-  <h2><span class="num">2</span>연구 지형</h2>
-  <p class="point">3DGS에서 physical AI로 가는 단계마다 연구가 나와 있지만, 분할은 모두 겉모습으로 정하거나 주어진 것으로 받는다. 분할이 물리적으로 맞는지 확인하는 단계는 없다.</p>
+  <h2><span class="num">2</span>관련 연구</h2>
+  <p class="point">3DGS에서 physical AI로 이어지는 각 단계마다 연구가 있지만, segmentation은 모두 appearance로 정하거나 주어진 것으로 받는다. Segmentation이 물리적으로 맞는지 확인하는 단계는 없다.</p>
   <div class="table-wrap"><table>
-    <thead><tr><th>단계</th><th>대표 연구</th><th>분할을 어떻게 다루나</th></tr></thead>
+    <thead><tr><th>단계</th><th>대표 연구</th><th>Segmentation을 다루는 방식</th></tr></thead>
     <tbody>
-      <tr><td>2D 마스크를 가우시안에 올리기</td>
+      <tr><td>2D mask → 3D Gaussian lifting</td>
         <td><a href="https://github.com/lkeab/gaussian-grouping">Gaussian Grouping</a>, <a href="https://arxiv.org/abs/2312.00860">SAGA</a>, <a href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/03300.pdf">FlashSplat</a>, <a href="https://mlanthology.org/neurips/2024/jain2024neurips-gaussiancut">GaussianCut</a>, <a href="https://openaccess.thecvf.com/content/CVPR2026/html/He_NG-GS_NeRF-guided_3D_Gaussian_Splatting_Segmentation_CVPR_2026_paper.html">NG-GS (CVPR'26)</a></td>
-        <td>분할이 목표. 기준은 겉모습(SAM 마스크)</td></tr>
-      <tr><td>가려진 면 채우기</td>
+        <td>Segmentation 자체가 목표. 기준은 appearance(SAM mask)</td></tr>
+      <tr><td>Amodal completion</td>
         <td><a href="https://arxiv.org/abs/2507.08416">InstaScene (ICCV'25)</a>, <a href="https://arxiv.org/abs/2412.02075">Gaussian Object Carver</a>, <a href="https://arxiv.org/abs/2503.05484">DecoupledGaussian (CVPR'25)</a></td>
-        <td>분할 결과를 입력으로 받음</td></tr>
-      <tr><td>물성·재질 부여</td>
+        <td>Segmentation 결과를 입력으로 사용</td></tr>
+      <tr><td>Physical property 추정</td>
         <td><a href="https://openaccess.thecvf.com/content/ICCV2025/html/Zhao_PhysSplat_Efficient_Physics_Simulation_for_3D_Scenes_via_MLLM-Guided_Gaussian_ICCV_2025_paper.html">PhysSplat (ICCV'25)</a>, <a href="https://arxiv.org/abs/2412.11258">GaussianProperty (ICCV'25)</a>, <a href="https://arxiv.org/abs/2608.27365">KnockGS</a></td>
-        <td>분할을 입력으로 받음</td></tr>
-      <tr><td>관절 물체</td>
+        <td>Segmentation 결과를 입력으로 사용</td></tr>
+      <tr><td>Articulated object</td>
         <td><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Guo_ArticulatedGS_Self-supervised_Digital_Twin_Modeling_of_Articulated_Objects_using_3D_CVPR_2025_paper.html">ArticulatedGS (CVPR'25)</a>, <a href="https://arxiv.org/abs/2506.03594">SplArt (ICCV'25)</a>, <a href="https://arxiv.org/abs/2506.09663">DeGSS</a>, <a href="https://arxiv.org/abs/2507.02600">ArtGS</a></td>
-        <td>두 상태의 움직임으로 파트를 나눔. 물체 하나가 대상</td></tr>
-      <tr><td>sim-ready 장면 조립</td>
+        <td>두 상태 간 motion으로 part를 나눔. 단일 물체 대상</td></tr>
+      <tr><td>Sim-ready scene 구성</td>
         <td><a href="https://arxiv.org/abs/2510.05560">HoloScene (NeurIPS'25)</a>, <a href="https://arxiv.org/abs/2603.02133">SimRecon (CVPR'26)</a>, <a href="https://arxiv.org/abs/2606.21596">φ-Scene</a>, <a href="https://arxiv.org/abs/2605.30338">REST3D</a></td>
-        <td>분할은 고정. 관계는 VLM으로 추론하고, 물리는 자세·형상 보정에만 씀</td></tr>
-      <tr><td>로봇 디지털 트윈</td>
+        <td>Segmentation 고정. Relation은 VLM으로 추론하고, 물리는 pose·geometry 보정에만 사용</td></tr>
+      <tr><td>Robot digital twin</td>
         <td><a href="https://arxiv.org/abs/2603.05108">GaussTwin</a>, <a href="https://arxiv.org/abs/2606.17520">GASE</a>, <a href="https://par.nsf.gov/servlets/purl/10535783">VR-GS</a></td>
-        <td>분할은 고정</td></tr>
+        <td>Segmentation 고정</td></tr>
     </tbody>
   </table></div>
-  <p>가장 가까운 선행 연구는 두 편이다. <a href="https://openaccess.thecvf.com/content_cvpr_2013/html/Zheng_Beyond_Point_Clouds_2013_CVPR_paper.html">Zheng et al. (CVPR 2013)</a>은 점군에서 혼자 서지 못하는 조각을 안정성 기준으로 묶었다.
-    <a href="https://arxiv.org/abs/2603.06846">MotionBits (2026)</a>는 "같은 강체 운동을 하는 최소 단위"를 분할 단위로 정의했지만 2D 비디오에서만 다룬다.</p>
+  <p>가장 가까운 선행 연구는 두 편이다. <a href="https://openaccess.thecvf.com/content_cvpr_2013/html/Zheng_Beyond_Point_Clouds_2013_CVPR_paper.html">Zheng et al. (CVPR 2013)</a>은 point cloud에서 혼자 서지 못하는 조각을 stability 기준으로 묶었다.
+    <a href="https://arxiv.org/abs/2603.06846">MotionBits (2026)</a>는 같은 rigid motion을 하는 최소 단위를 segmentation 단위로 정의했지만 2D video만 다룬다.</p>
 </section>
 
 <section id="problem">
   <h2><span class="num">3</span>문제 정의</h2>
-  <p class="point"><b>물리 단위</b>는 상호작용을 받을 때 한 몸처럼 같이 움직이는 가우시안들의 가장 큰 집합이다.
-    단위 사이에는 고정 부착, 접촉·지지, 독립 중 하나의 관계가 있고, 환경에 붙은 단위는 정적이다. 시뮬레이터가 필요로 하는 정보는 이 단위와 관계다.</p>
-  <p>시각 단위와 물리 단위는 세 가지 방식으로 어긋난다.</p>
+  <p class="point"><b>Physical unit</b>은 상호작용을 받을 때 하나의 rigid body처럼 함께 움직이는 Gaussian들의 최대 집합이다.
+    Unit 사이에는 fixed attachment, contact/support, independent 중 하나의 relation이 있고, 환경에 고정된 unit은 static이다. 시뮬레이터가 필요로 하는 정보는 이 unit과 relation이다.</p>
+  <p>시각적 segment와 physical unit은 세 가지 방식으로 어긋난다.</p>
   <div class="table-wrap"><table>
-    <thead><tr><th>어긋남</th><th>예</th><th>시뮬레이션에서 생기는 일</th></tr></thead>
+    <thead><tr><th>유형</th><th>예</th><th>시뮬레이션에서 생기는 문제</th></tr></thead>
     <tbody>
-      <tr><td>과분할</td><td>머그 손잡이가 따로 잡힘</td><td>손잡이만 떨어지거나, 손잡이를 잡으면 손잡이만 들림</td></tr>
-      <tr><td>과소분할</td><td>컵과 받침이 하나로 잡힘</td><td>컵을 들면 받침도 같이 들림</td></tr>
+      <tr><td>Over-segmentation</td><td>머그 손잡이가 따로 잡힘</td><td>손잡이만 떨어지거나, 손잡이를 잡으면 손잡이만 들림</td></tr>
+      <tr><td>Under-segmentation</td><td>컵과 받침이 하나로 잡힘</td><td>컵을 들면 받침도 같이 들림</td></tr>
       <tr><td>고정 누락·과잉</td><td>벽에 걸린 액자, 화분에 심긴 줄기</td><td>액자가 떨어지거나, 고정된 부분이 잘린 면처럼 보임</td></tr>
     </tbody>
   </table></div>
-  <p><b>기존 평가 지표로는 이 오류가 잘 드러나지 않는다.</b> 분할은 보통 촬영 시점에서 2D mIoU로 평가한다. 위 오류는 대부분 접촉면과 가려진 영역에서 생기므로, 물체를 움직였을 때 비로소 나타난다.</p>
-  <p><b>정지 상태의 관찰만으로는 구분할 수 없는 경우가 있다.</b> 다리 위에 얹혀 있는 의자 좌판과 고정된 좌판은 정지 상태에서 같게 보이며, 밀거나 들어 올려야 구분된다.
-    따라서 분할에 상호작용 관찰을 활용할 필요가 있다.</p>
+  <p><b>기존 지표로는 이 오류가 잘 드러나지 않는다.</b> Segmentation은 보통 학습 시점에서 2D mIoU로 평가한다. 위 오류는 대부분 contact 영역과 가려진 영역에서 생기므로, 물체를 움직였을 때 비로소 나타난다.</p>
+  <p><b>정지 상태만 봐서는 구분할 수 없는 경우가 있다.</b> 다리 위에 얹혀 있는 의자 좌판과 고정된 좌판은 정지 상태에서 같게 보이고, 밀거나 들어 올려야 구분된다.
+    따라서 segmentation에 상호작용 정보를 활용할 필요가 있다.</p>
 </section>
 
 <section id="method">
-  <h2><span class="num">4</span>방법: 시뮬레이션으로 분할 고르기</h2>
-  <p class="point">분할 후보를 가설로 두고, 관찰된 상호작용을 가장 잘 재현하는 가설을 선택한다 (segmentation-by-simulation).
-    입력은 3DGS 장면 하나와 짧은 상호작용 관찰이다. 상호작용 관찰은 물체 몇 개를 손으로 밀거나 든 뒤의 전후 촬영, 또는 그 과정의 짧은 영상이다.</p>
+  <h2><span class="num">4</span>제안 방법</h2>
+  <p class="point">Segmentation 후보를 가설로 두고, 관찰된 상호작용을 시뮬레이션으로 가장 잘 재현하는 가설을 선택한다 (segmentation-by-simulation).
+    입력은 3DGS 장면과 짧은 상호작용 관찰이다. 상호작용 관찰은 물체 몇 개를 손으로 밀거나 든 전후의 multi-view 촬영, 또는 그 과정의 짧은 영상이다.</p>
 
   <figure class="diagram">
     <svg viewBox="0 0 760 544" role="img" aria-label="방법 개요" font-size="12.5" font-family="Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif">
       <defs><marker id="seg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--ink3)"/></marker></defs>
       <text x="24" y="30" font-size="15" font-weight="600" fill="var(--ink)">방법 개요</text>
-      <text x="24" y="50" font-size="11.5" fill="var(--ink3)">③이 주된 기여이며, ①은 탐색 공간을 줄이기 위한 기존 기법이다</text>
+      <text x="24" y="50" font-size="11.5" fill="var(--ink3)">③이 주된 기여이며, ①은 search space를 줄이기 위한 기존 기법이다</text>
       <g fill="none" stroke="var(--ink3)" stroke-width="1.25">
         <path d="M240 108V132" marker-end="url(#seg-arrow)"/><path d="M240 204V232" marker-end="url(#seg-arrow)"/>
         <path d="M240 304V332" marker-end="url(#seg-arrow)"/><path d="M240 420V448" marker-end="url(#seg-arrow)"/>
         <path d="M488 348H440" marker-end="url(#seg-arrow)"/>
       </g>
       <path d="M440 404H612V364" fill="none" stroke="var(--ink3)" stroke-width="1.25" stroke-dasharray="4 4" marker-end="url(#seg-arrow)"/>
-      <text x="452" y="428" font-size="11.5" fill="var(--ink3)">모호하면 가를 다음 행동 제안 (확장)</text>
+      <text x="452" y="428" font-size="11.5" fill="var(--ink3)">모호하면 구분할 다음 행동 제안 (확장)</text>
       <rect x="40" y="68" width="400" height="40" rx="8" fill="none" stroke="var(--ink3)" stroke-width="1.25"/>
-      <text x="240" y="92" text-anchor="middle" font-weight="600" fill="var(--ink)">3DGS 장면 (멀티뷰 촬영으로 재구성)</text>
+      <text x="240" y="92" text-anchor="middle" font-weight="600" fill="var(--ink)">3DGS 장면 (multi-view 촬영으로 재구성)</text>
       <rect x="40" y="132" width="400" height="72" rx="8" fill="none" stroke="var(--ink3)" stroke-width="1.25"/>
-      <text x="56" y="156" font-size="13" font-weight="600" fill="var(--ink)">① 후보 만들기</text>
-      <text x="56" y="172" fill="var(--ink)">다중 스케일 분할로 병합 트리를 만든다</text>
-      <text x="56" y="188" fill="var(--ink)">VLM 상식으로 가설마다 사전 확률을 준다</text>
+      <text x="56" y="156" font-size="13" font-weight="600" fill="var(--ink)">① 후보 생성</text>
+      <text x="56" y="172" fill="var(--ink)">Multi-scale segmentation으로 merge tree 구성</text>
+      <text x="56" y="188" fill="var(--ink)">VLM prior로 가설마다 사전 확률 부여</text>
       <rect x="40" y="232" width="400" height="72" rx="8" fill="none" stroke="var(--ink3)" stroke-width="1.25"/>
-      <text x="56" y="256" font-size="13" font-weight="600" fill="var(--ink)">② 정지 상태로 가지치기</text>
-      <text x="56" y="272" fill="var(--ink)">따로 떼면 접촉만으로 못 버티는 가설을 뺀다</text>
+      <text x="56" y="256" font-size="13" font-weight="600" fill="var(--ink)">② Static pruning</text>
+      <text x="56" y="272" fill="var(--ink)">따로 떼면 contact만으로 버티지 못하는 가설 제거</text>
       <text x="56" y="288" fill="var(--ink)">예: 벽 액자를 독립 물체로 보는 가설</text>
       <rect x="40" y="332" width="400" height="88" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
-      <text x="56" y="356" font-size="13" font-weight="600" fill="var(--ink)">③ 상호작용으로 검증 (핵심)</text>
-      <text x="56" y="372" fill="var(--ink)">가설마다 관찰된 행동을 시뮬레이터에서 재현</text>
+      <text x="56" y="356" font-size="13" font-weight="600" fill="var(--ink)">③ 시뮬레이션 기반 검증 (핵심)</text>
+      <text x="56" y="372" fill="var(--ink)">가설마다 관찰된 행동을 시뮬레이션으로 재현</text>
       <text x="56" y="388" fill="var(--ink)">3DGS로 렌더링해 관찰과 비교</text>
-      <text x="56" y="404" fill="var(--ink)">자유도 벌점, 동률은 사전으로 해소</text>
+      <text x="56" y="404" fill="var(--ink)">DoF penalty, 동률은 prior로 결정</text>
       <rect x="40" y="448" width="400" height="72" rx="8" fill="none" stroke="var(--ink3)" stroke-width="1.25"/>
-      <text x="56" y="472" font-size="13" font-weight="600" fill="var(--ink)">④ 내보내기</text>
-      <text x="56" y="488" fill="var(--ink)">물리 단위 + 관계 (부착·접촉·독립·정적)</text>
-      <text x="56" y="504" fill="var(--ink)">강체·조인트·충돌 프록시로 시뮬레이터에 바로 사용</text>
+      <text x="56" y="472" font-size="13" font-weight="600" fill="var(--ink)">④ Export</text>
+      <text x="56" y="488" fill="var(--ink)">Physical unit + relation (attachment·contact·static)</text>
+      <text x="56" y="504" fill="var(--ink)">Rigid body·joint·collision proxy로 시뮬레이터에서 사용</text>
       <rect x="488" y="292" width="248" height="72" rx="8" fill="none" stroke="var(--ink3)" stroke-width="1.25"/>
       <text x="504" y="316" font-size="13" font-weight="600" fill="var(--ink)">상호작용 관찰</text>
       <text x="504" y="332" fill="var(--ink)">손으로 밀거나 든 전후 촬영</text>
       <text x="504" y="348" fill="var(--ink)">또는 짧은 영상</text>
     </svg>
-    <figcaption>①과 ②는 검사할 가설을 줄이고, ③에서 관찰을 가장 잘 재현하는 가설 하나가 남는다. 점선은 박사과정 확장인 능동 상호작용이다.</figcaption>
+    <figcaption>①과 ②에서 검사할 가설을 줄이고, ③에서 관찰을 가장 잘 재현하는 가설 하나를 선택한다. 점선은 향후 확장인 active interaction이다.</figcaption>
   </figure>
 
   <ol>
-    <li><b>후보 만들기</b>: 다중 스케일 3DGS 분할(SAGA·GARField 방식)로 병합 트리를 만든다. 트리를 자르는 위치와 이웃 단위 사이의 관계 라벨을 합친 것이 가설 H다.
-      VLM은 "손잡이는 서랍에 붙어 있다" 같은 상식으로 가설에 사전 확률을 준다. 이 단계는 탐색 공간을 줄이기 위한 것으로, 기여에는 포함하지 않는다.</li>
-    <li><b>정지 상태로 가지치기</b>: 따로 떼면 접촉만으로 버틸 수 없는 가설은 짧은 중력 시뮬레이션으로 걸러내고 부착이나 융합으로 바꾼다.</li>
-    <li><b>상호작용으로 검증 (핵심)</b>: 남은 가설마다 관찰된 행동을 시뮬레이터에서 다시 한다. 손이 닿은 단위는 관찰된 궤적을 따라 움직인다.
-      나머지는 가설의 관계에 따라 따라가거나(부착), 마찰로 끌려가거나(접촉), 그대로 있다(독립·정적). 결과를 3DGS로 렌더링해 관찰과 비교한다.</li>
-    <li><b>내보내기</b>: 고른 가설을 시뮬레이터 자산(강체, 고정 조인트, 충돌 프록시)으로 내보낸다. 가우시안 외관은 각 몸에 붙는다.</li>
+    <li><b>후보 생성</b>: SAGA·GARField 방식의 multi-scale segmentation으로 merge tree를 만든다. Tree를 자르는 위치와 인접 unit 사이의 relation label 조합이 하나의 가설 H가 된다.
+      VLM은 "손잡이는 서랍에 붙어 있다" 같은 상식으로 각 가설에 prior를 준다. 이 단계는 search space를 줄이기 위한 것으로, 기여에는 포함하지 않는다.</li>
+    <li><b>Static pruning</b>: 따로 떼었을 때 contact만으로 버틸 수 없는 가설은 짧은 중력 시뮬레이션으로 걸러내고, attachment나 같은 rigid body로 바꾼다.</li>
+    <li><b>시뮬레이션 기반 검증 (핵심)</b>: 남은 가설마다 관찰된 행동을 시뮬레이션으로 재현한다. 손이 닿은 unit은 관찰된 trajectory를 따라 움직이고,
+      나머지는 가설의 relation에 따라 함께 움직이거나(attachment), 마찰로 끌려가거나(contact), 그대로 있는다(independent·static). 결과를 3DGS로 렌더링해 실제 관찰과 비교한다.</li>
+    <li><b>Export</b>: 선택된 가설을 시뮬레이터 asset(rigid body, fixed joint, collision proxy)으로 내보낸다. Gaussian appearance는 각 rigid body에 붙인다.</li>
   </ol>
 
   <p>가설 선택은 다음 목적식을 따른다.</p>
   <div class="math fallback" data-tex="H^{*} = \arg\min_{H \in \mathcal{H}} \Big[ \min_{\theta} D\big(R(\mathrm{Sim}(G, H, \theta; a)),\, O\big) + \lambda\, k(H) - \mu \log p(H) \Big]">H* = argmin<sub>H</sub> [ min<sub>θ</sub> D( R(Sim(G, H, θ; a)), O ) + λ·k(H) − μ·log p(H) ]</div>
   <ul class="vars">
-    <li>G는 3DGS 장면, H는 분할과 관계 가설, θ는 연속 파라미터(자세, 마찰, 질량 비율), a는 관찰된 행동, R은 3DGS 렌더링, O는 관찰이다.</li>
-    <li>k(H)는 가설의 자유도 수다. 과분할이나 변형체처럼 자유도가 많은 가설은 거의 모든 움직임을 맞출 수 있어서 벌점을 준다.</li>
-    <li>p(H)는 VLM 사전이다. 관찰로 구분되지 않는 가설들 사이에서 동률을 깬다.</li>
-    <li>바깥의 argmin은 사전 확률 순서의 빔 탐색(이산), 안쪽의 min은 연속 최적화다. 분할은 이산 변수라 미분으로 풀 수 없기 때문이다.</li>
-    <li>계산의 핵심은 "가설 수 × 시뮬레이션 × 렌더링"을 GPU에서 한꺼번에 평가하는 것이다.</li>
+    <li>G는 3DGS 장면, H는 segmentation·relation 가설, θ는 continuous parameter(pose, friction, mass 비율), a는 관찰된 행동, R은 3DGS rendering, O는 관찰이다.</li>
+    <li>k(H)는 가설의 DoF다. Over-segmentation이나 deformable 가설처럼 DoF가 많은 가설은 거의 모든 움직임을 맞출 수 있으므로 penalty를 준다.</li>
+    <li>p(H)는 VLM prior다. 관찰만으로 구분되지 않는 가설 사이에서 tie-breaker 역할을 한다.</li>
+    <li>바깥의 argmin은 prior 순서의 beam search(discrete), 안쪽의 min은 continuous optimization이다. Segmentation은 discrete 변수라 gradient로 풀 수 없기 때문이다.</li>
+    <li>계산 비용의 핵심은 "가설 수 × 시뮬레이션 × 렌더링"을 GPU에서 한 번에 평가하는 것이다.</li>
   </ul>
 </section>
 
 <section id="why-sim">
-  <h2><span class="num">5</span>궤적 군집과의 차이</h2>
-  <p class="point">움직임이 관찰되면 궤적이 비슷한 가우시안끼리 묶는 방법(SplArt, DeGSS, MotionBits)으로도 분할할 수 있다. 시뮬레이션 기반 검증은 이 방법과 다음 세 가지 점에서 다르다.</p>
+  <h2><span class="num">5</span>Trajectory clustering과의 차이</h2>
+  <p class="point">움직임이 관찰되면 trajectory가 비슷한 Gaussian끼리 묶는 방법(SplArt, DeGSS, MotionBits)으로도 segmentation할 수 있다. 시뮬레이션 기반 검증은 이 방법과 다음 세 가지 점에서 다르다.</p>
   <ul>
-    <li><b>접촉과 부착을 구분한다.</b> 아래 책을 밀면 위 책도 마찰 때문에 함께 움직인다. 궤적 군집은 두 책을 하나로 묶지만, 시뮬레이션에서는 "접촉" 가설도 같은 관찰을 설명할 수 있음을 확인할 수 있다.
-      이 경우 사전 확률로 선택하거나, 두 가설을 구분할 수 있는 다음 행동(위 책 들기)을 제안한다.</li>
-    <li><b>관찰하지 않은 상호작용으로 검증할 수 있다.</b> 선택된 분할로 다른 상호작용의 결과를 예측할 수 있으므로, 라벨 일치도 외에 물리적 타당성을 평가할 수 있다.</li>
-    <li><b>결과를 시뮬레이터에서 바로 사용할 수 있다.</b> 궤적 군집의 결과는 라벨이므로, 관계와 조인트로 변환하는 단계가 따로 필요하다.</li>
+    <li><b>Contact와 attachment를 구분한다.</b> 아래 책을 밀면 위 책도 마찰 때문에 함께 움직인다. Trajectory clustering은 두 책을 하나로 묶지만, 시뮬레이션에서는 contact 가설도 같은 관찰을 설명할 수 있음을 알 수 있다.
+      이 경우 prior로 선택하거나, 두 가설을 구분할 수 있는 다음 행동(위 책 들기)을 제안한다.</li>
+    <li><b>Held-out interaction으로 검증할 수 있다.</b> 선택된 segmentation으로 다른 상호작용의 결과를 예측할 수 있으므로, label 일치도 외에 물리적 타당성을 평가할 수 있다.</li>
+    <li><b>결과를 시뮬레이터에서 바로 사용할 수 있다.</b> Trajectory clustering 결과는 label이므로, relation과 joint로 변환하는 단계가 따로 필요하다.</li>
   </ul>
-  <p>궤적 군집은 주요 비교 대상으로 실험에 포함한다.</p>
+  <p>Trajectory clustering은 주요 baseline으로 실험에 포함한다.</p>
 </section>
 
 <section id="contrib">
-  <h2><span class="num">6</span>기여와 선행 연구 대비 차이</h2>
-  <p class="point">기존 연구에서 고정 입력으로 쓰이던 분할을, 물리적 관찰로 검증하고 수정하는 대상으로 다룬다는 점이 주된 기여다.</p>
+  <h2><span class="num">6</span>기여</h2>
+  <p class="point">기존 연구에서 고정 입력으로 쓰이던 segmentation을, 물리적 관찰로 검증하고 수정하는 대상으로 다룬다는 점이 주된 기여다.</p>
   <ol>
-    <li><b>문제 정의와 평가</b>: 물리 단위 분할을 상호작용 결과로 정의한다. 이를 재는 지표(잡아 들기 일치도, 보지 않은 상호작용 예측)와 정답이 있는 합성 벤치마크를 만든다.</li>
-    <li><b>방법</b>: 분할 가설을 시뮬레이션과 렌더링으로 검증하는 segmentation-by-simulation. 자유도 벌점과 사전으로 식별성 문제를 다룬다.</li>
-    <li><b>연결</b>: 결과를 물리 시뮬레이터에 바로 넣고, 로봇 조작 과제 성공률로 효과를 보인다.</li>
+    <li><b>문제 정의와 평가</b>: Physical unit segmentation을 상호작용 결과로 정의하고, 이를 평가하는 지표(grasp-and-lift consistency, held-out interaction prediction)와 정답이 있는 synthetic benchmark를 만든다.</li>
+    <li><b>방법</b>: Segmentation 가설을 시뮬레이션과 렌더링으로 검증하는 segmentation-by-simulation. DoF penalty와 prior로 identifiability 문제를 다룬다.</li>
+    <li><b>연결</b>: 결과를 물리 시뮬레이터에 바로 넣고, robot manipulation task 성공률로 효과를 보인다.</li>
   </ol>
   <div class="table-wrap"><table>
-    <thead><tr><th>비교 대상</th><th>그 연구가 하는 것</th><th>이 연구가 다른 점</th></tr></thead>
+    <thead><tr><th>비교 대상</th><th>해당 연구</th><th>본 연구와의 차이</th></tr></thead>
     <tbody>
-      <tr><td>시각 분할 (Gaussian Grouping, SAGA)</td><td>겉모습 기준 단위</td><td>물리 단위, 상호작용으로 검증</td></tr>
-      <tr><td>sim-ready 조립 (HoloScene, SimRecon, φ-Scene, REST3D)</td><td>분할 고정, 물리로 자세·형상 보정, 관계는 VLM</td><td>분할 자체가 최적화 변수</td></tr>
-      <tr><td>관절 물체 (ArticulatedGS, SplArt, DeGSS)</td><td>물체 하나, 두 상태 궤적으로 파트 분할</td><td>장면 수준, 접촉과 부착 구분, 새 상호작용 예측</td></tr>
-      <tr><td>운동 단위 분할 (<a href="https://arxiv.org/abs/2603.06846">MotionBits</a>)</td><td>2D 비디오에서 같은 강체 운동 단위</td><td>3D, 시뮬레이터 자산 출력</td></tr>
-      <tr><td>안정성 묶기 (<a href="https://openaccess.thecvf.com/content_cvpr_2013/html/Zheng_Beyond_Point_Clouds_2013_CVPR_paper.html">Zheng 2013</a>)</td><td>점군, 정지 안정성만 사용</td><td>정지 + 상호작용 증거, 3DGS</td></tr>
-      <tr><td>물성 추정 (<a href="https://arxiv.org/abs/2506.04120">Splatting Physical Scenes</a>, KnockGS, <a href="https://arxiv.org/abs/2609.07532">PhysReal</a>)</td><td>분할은 주어지고 물리 파라미터만 추정</td><td>서로 보완. 분할이 맞아야 물성 추정도 맞는다</td></tr>
-      <tr><td>생성형 관절 사전 (<a href="https://arxiv.org/abs/2511.21887">UniArt</a>, <a href="https://openaccess.thecvf.com/content/CVPR2024/supplemental/Liu_CAGE_Controllable_Articulation_CVPR_2024_supplemental.pdf">CAGE</a>)</td><td>물체 수준 생성 모델</td><td>나중에 후보 제안기로 쓸 수 있음</td></tr>
+      <tr><td>Visual segmentation (Gaussian Grouping, SAGA)</td><td>Appearance 기준 segment</td><td>Physical unit, 상호작용으로 검증</td></tr>
+      <tr><td>Sim-ready scene (HoloScene, SimRecon, φ-Scene, REST3D)</td><td>Segmentation 고정, 물리는 pose·geometry 보정, relation은 VLM</td><td>Segmentation 자체가 최적화 대상</td></tr>
+      <tr><td>Articulated object (ArticulatedGS, SplArt, DeGSS)</td><td>단일 물체, 두 상태의 trajectory로 part segmentation</td><td>Scene 수준, contact와 attachment 구분, 새 상호작용 예측</td></tr>
+      <tr><td>Motion segmentation (<a href="https://arxiv.org/abs/2603.06846">MotionBits</a>)</td><td>2D video에서 rigid motion 단위 segmentation</td><td>3D, 시뮬레이터 asset 출력</td></tr>
+      <tr><td>Stability 기반 grouping (<a href="https://openaccess.thecvf.com/content_cvpr_2013/html/Zheng_Beyond_Point_Clouds_2013_CVPR_paper.html">Zheng 2013</a>)</td><td>Point cloud, 정적 stability만 사용</td><td>Static + 상호작용 정보, 3DGS</td></tr>
+      <tr><td>Physical parameter 추정 (<a href="https://arxiv.org/abs/2506.04120">Splatting Physical Scenes</a>, KnockGS, <a href="https://arxiv.org/abs/2609.07532">PhysReal</a>)</td><td>Segmentation은 주어지고 물리 파라미터만 추정</td><td>상호보완적. Segmentation이 맞아야 parameter 추정도 맞다</td></tr>
+      <tr><td>Generative articulation prior (<a href="https://arxiv.org/abs/2511.21887">UniArt</a>, <a href="https://openaccess.thecvf.com/content/CVPR2024/supplemental/Liu_CAGE_Controllable_Articulation_CVPR_2024_supplemental.pdf">CAGE</a>)</td><td>물체 수준 생성 모델</td><td>향후 hypothesis 생성기로 활용 가능</td></tr>
     </tbody>
   </table></div>
 </section>
 
 <section id="eval">
-  <h2><span class="num">7</span>평가 설계</h2>
-  <p class="point">기존 2D mIoU에 더해, 분할을 물리적 결과로 평가하는 지표를 사용한다. 이 지표 설계도 기여에 포함된다.</p>
+  <h2><span class="num">7</span>실험 설계</h2>
+  <p class="point">기존 2D mIoU에 더해, segmentation을 물리적 결과로 평가하는 지표를 사용한다. 이 지표 설계도 기여에 포함된다.</p>
   <p><b>데이터</b></p>
   <ul>
-    <li><b>합성</b>: 물리 시뮬레이터로 만든 탁상 장면. PartNet-Mobility와 <a href="https://arxiv.org/abs/2507.12465">PhysXNet</a> 자산으로 정답 몸·조인트를 두고, 사실적으로 렌더링해 3DGS를 학습한다. 상호작용도 정답 장면에서 시뮬레이션해 만든다.</li>
-    <li><b>실제</b>: 휴대폰으로 찍은 전후 촬영(손으로 밀기·들기). 공개된 <a href="https://arxiv.org/abs/2411.03706">3DGS-CD</a> 전후 재배치 데이터도 활용을 검토한다.</li>
+    <li><b>Synthetic</b>: 물리 시뮬레이터로 만든 tabletop scene. PartNet-Mobility와 <a href="https://arxiv.org/abs/2507.12465">PhysXNet</a> asset으로 정답 rigid body·joint를 두고, photorealistic rendering으로 3DGS를 학습한다. 상호작용도 정답 scene에서 시뮬레이션해 만든다.</li>
+    <li><b>Real</b>: 휴대폰으로 찍은 before/after 촬영(손으로 밀기·들기). 공개된 <a href="https://arxiv.org/abs/2411.03706">3DGS-CD</a>의 before/after rearrangement 데이터도 활용을 검토한다.</li>
   </ul>
-  <p><b>지표</b></p>
+  <p><b>평가 지표</b></p>
   <div class="table-wrap"><table>
-    <thead><tr><th>지표</th><th>재는 것</th><th>왜 필요한가</th></tr></thead>
+    <thead><tr><th>지표</th><th>측정 대상</th><th>필요한 이유</th></tr></thead>
     <tbody>
-      <tr><td>단위 일치도</td><td>분할이 정답 몸과 얼마나 일치하는가</td><td>표준 비교</td></tr>
-      <tr><td>관계 정확도</td><td>부착·접촉·독립·정적 분류</td><td>시뮬레이터가 쓰는 정보</td></tr>
-      <tr><td>잡아 들기 일치도</td><td>한 점을 잡아 들 때 따라오는 가우시안 집합과 정답의 IoU</td><td>과분할·과소분할·고정 오류를 한 번에 잡음</td></tr>
-      <tr><td>보지 않은 상호작용 예측</td><td>상호작용 A로 정한 분할로 B의 결과를 예측한 오차</td><td>분할이 새로운 상호작용에도 맞는지 확인</td></tr>
-      <tr><td>로봇 과제 성공률</td><td>시뮬레이터에서 손잡이로 머그 들기, 컵만 옮기기, 화분 들기</td><td>실제 쓸모</td></tr>
+      <tr><td>Unit accuracy</td><td>Segmentation이 정답 rigid body와 얼마나 일치하는가</td><td>표준 비교</td></tr>
+      <tr><td>Relation accuracy</td><td>Attachment·contact·independent·static 분류</td><td>시뮬레이터가 쓰는 정보</td></tr>
+      <tr><td>Grasp-and-lift consistency</td><td>한 점을 잡아 들었을 때 함께 들리는 Gaussian 집합과 정답의 IoU</td><td>Over/under-segmentation과 고정 오류를 한 번에 측정</td></tr>
+      <tr><td>Held-out interaction prediction</td><td>상호작용 A로 정한 segmentation으로 B의 결과를 예측한 오차</td><td>Segmentation이 새로운 상호작용에도 맞는지 확인</td></tr>
+      <tr><td>Manipulation 성공률</td><td>시뮬레이터에서 손잡이로 머그 들기, 컵만 옮기기, 화분 들기</td><td>실제 활용도</td></tr>
     </tbody>
   </table></div>
-  <p><b>비교 대상</b>: Gaussian Grouping, SAGA(가장 좋은 스케일), 고정 마스크 + VLM 관계(SimRecon·REST3D 방식), 궤적 군집(DeGSS·SplArt 방식), 안정성 묶기(Zheng 방식).</p>
+  <p><b>Baseline</b>: Gaussian Grouping, SAGA(최적 scale), 고정 mask + VLM relation(SimRecon·REST3D 방식), trajectory clustering(DeGSS·SplArt 방식), stability grouping(Zheng 방식).</p>
 </section>
 
 <section id="plan">
-  <h2><span class="num">8</span>진행 계획</h2>
-  <p class="point">첫 단계에서는 기존 분할 방법이 실제로 물리적 오류를 얼마나 만드는지 먼저 측정한다. 기간은 예상치이며, 파일럿 실험은 아직 수행하지 않았다.</p>
+  <h2><span class="num">8</span>연구 계획</h2>
+  <p class="point">첫 단계에서는 기존 segmentation 방법이 실제로 물리적 오류를 얼마나 만드는지 먼저 측정한다. 기간은 예상치이며, pilot 실험은 아직 수행하지 않았다.</p>
   <ol>
-    <li><b>파일럿 (2~3주)</b>: 시뮬레이터 장면 5~10개(손잡이 머그, 쌓인 책, 컵과 받침, 화분 식물, 벽 부착물)를 만든다. Gaussian Grouping·SAGA로 분할한 조각을 각각 강체로 올리고, 잡아 들기 실패율을 잰다.</li>
-    <li><b>정지 단계 (약 1개월)</b>: 병합 트리 후보, VLM 사전, 안정성 가지치기를 만들고 합성 장면에서 단위·관계 정확도를 잰다.</li>
-    <li><b>상호작용 검증 (1~2개월)</b>: 합성 상호작용으로 가설을 고르고, 가설을 GPU에서 한꺼번에 평가하도록 만든다.</li>
-    <li><b>실제 데이터 (약 1개월)</b>: 전후 촬영으로 검증하고, 보지 않은 상호작용 예측을 잰다.</li>
-    <li><b>로봇 과제와 논문화</b>: 로봇 조작 과제 성공률을 재고 논문을 쓴다. 쓰기 직전에 선행 연구를 다시 조사한다.</li>
+    <li><b>Pilot (2~3주)</b>: 시뮬레이터 scene 5~10개(손잡이 머그, 쌓인 책, 컵과 받침, 화분, 벽 부착물)를 만든다. Gaussian Grouping·SAGA로 나눈 segment를 각각 rigid body로 올리고, grasp-and-lift 실패율을 측정한다.</li>
+    <li><b>Static 단계 (약 1개월)</b>: Merge tree 후보, VLM prior, static pruning을 구현하고 synthetic scene에서 unit·relation accuracy를 측정한다.</li>
+    <li><b>시뮬레이션 기반 검증 (1~2개월)</b>: Synthetic interaction으로 가설을 선택하고, 가설들을 GPU에서 batch로 평가하도록 구현한다.</li>
+    <li><b>Real data (약 1개월)</b>: Before/after 촬영으로 검증하고 held-out interaction prediction을 측정한다.</li>
+    <li><b>Manipulation 실험과 논문 작성</b>: Robot manipulation 성공률을 측정하고 논문을 쓴다. 작성 직전에 관련 연구를 다시 조사한다.</li>
   </ol>
-  <p>첫 논문은 강체와 부착·접촉 관계로 범위를 좁힌다. 변형 결합은 자유도 벌점이 작동하는 것을 확인한 뒤 넣는다.</p>
+  <p>첫 논문은 rigid body와 attachment·contact relation으로 범위를 좁힌다. Deformable relation은 DoF penalty가 제대로 작동하는지 확인한 뒤 추가한다.</p>
 </section>
 
 <section id="risks">
-  <h2><span class="num">9</span>위험과 대응</h2>
-  <p class="point">가장 큰 위험은 식별성, 즉 한 번의 관찰로 가설이 하나로 정해지지 않는 것이다.</p>
+  <h2><span class="num">9</span>위험 요소와 대응</h2>
+  <p class="point">가장 큰 위험은 identifiability, 즉 한 번의 관찰로 가설이 하나로 정해지지 않는 경우다.</p>
   <div class="table-wrap"><table>
     <thead><tr><th>위험</th><th>대응</th></tr></thead>
     <tbody>
-      <tr><td>한 번 밀어서는 접촉과 부착이 갈리지 않음 (위 책이 같이 움직임)</td><td>VLM 사전으로 동률을 깨고, 남은 모호성은 보고하며 가르는 다음 행동을 제안</td></tr>
-      <tr><td>변형체 가설이 모든 움직임을 맞춤</td><td>자유도 벌점. 첫 논문은 강체와 부착·접촉 위주</td></tr>
-      <tr><td>가설 수가 폭발함</td><td>병합 트리로 제한, 사전 순서 빔 탐색, GPU 일괄 평가</td></tr>
-      <tr><td>접촉부 형상이 부정확함 (3DGS 기하 노이즈)</td><td>볼록 껍질이나 SDF 프록시, 노이즈 강건성 실험</td></tr>
-      <tr><td>실제 영상에서 손이 물체를 가림</td><td>전후 정지 촬영을 최소 설정으로, 영상은 확장으로</td></tr>
-      <tr><td>합성 데이터만 썼다는 비판</td><td>실제 전후 촬영과 보지 않은 실제 상호작용 예측</td></tr>
-      <tr><td>경쟁이 빠름 (2026년 6월에만 관련 arXiv 5편 이상)</td><td>차별점을 "분할이 변수, 예측으로 검증"에 고정하고 작성 직전에 다시 조사</td></tr>
+      <tr><td>한 번 미는 것으로는 contact와 attachment가 구분되지 않음 (위 책이 함께 움직임)</td><td>VLM prior로 선택하고, 남은 모호성은 명시하며 구분할 다음 행동을 제안</td></tr>
+      <tr><td>Deformable 가설이 모든 움직임을 설명해 버림</td><td>DoF penalty. 첫 논문은 rigid body와 attachment·contact 중심</td></tr>
+      <tr><td>가설 수 폭발</td><td>Merge tree로 제한, prior 순서 beam search, GPU batch 평가</td></tr>
+      <tr><td>Contact 영역 geometry 부정확 (3DGS geometry noise)</td><td>Convex hull이나 SDF proxy 사용, noise robustness 실험</td></tr>
+      <tr><td>실제 영상에서 손이 물체를 가림</td><td>Before/after 정지 촬영을 기본 설정으로, 영상은 확장</td></tr>
+      <tr><td>Synthetic data만 썼다는 비판</td><td>Real before/after 촬영과 held-out real interaction 예측</td></tr>
+      <tr><td>경쟁이 빠름 (2026년 6월에만 관련 arXiv 5편 이상)</td><td>차별점을 "segmentation을 최적화 대상으로, 예측으로 검증"에 두고 작성 직전 재조사</td></tr>
     </tbody>
   </table></div>
 </section>
 
 <section id="faq">
-  <h2><span class="num">10</span>자주 받는 질문</h2>
+  <h2><span class="num">10</span>FAQ</h2>
   <dl class="faq">
-    <dt>SAM 마스크를 잘 쓰면 되지 않나?</dt>
-    <dd>시각 단위와 물리 단위는 정의가 다르다. 오류가 접촉부에 몰려 있어 mIoU로는 안 보인다. 파일럿의 잡아 들기 실패율로 보인다.</dd>
-    <dt>움직임이 있으면 궤적 군집으로 끝나지 않나?</dt>
-    <dd>군집은 마찰로 끌려간 것과 붙어서 같이 움직인 것을 가르지 못하고, 새 상호작용을 예측하지 못한다. 군집은 비교 대상으로 넣는다.</dd>
+    <dt>SAM mask를 잘 쓰면 되지 않나?</dt>
+    <dd>시각적 segment와 physical unit은 정의가 다르다. 오류가 contact 영역에 몰려 있어 mIoU로는 잘 보이지 않는다. Pilot 실험의 grasp-and-lift 실패율로 보일 계획이다.</dd>
+    <dt>움직임이 있으면 trajectory clustering으로 충분하지 않나?</dt>
+    <dd>Clustering은 마찰로 끌려간 것과 붙어서 함께 움직인 것을 구분하지 못하고, 새 상호작용을 예측하지 못한다. Baseline으로 비교한다.</dd>
     <dt>HoloScene·SimRecon과 무엇이 다른가?</dt>
-    <dd>해당 연구들은 분할을 고정한 채 자세와 형상을 보정한다. 본 연구는 분할 자체를 보정하며, 두 접근은 함께 사용할 수 있다.</dd>
+    <dd>해당 연구들은 segmentation을 고정한 채 pose와 geometry를 보정한다. 본 연구는 segmentation 자체를 보정하며, 두 접근은 함께 사용할 수 있다.</dd>
     <dt>로봇 없이 가능한가?</dt>
-    <dd>사람 손으로 한 상호작용을 전후로 촬영하고, 시뮬레이터에서 합성 실험을 한다. 로봇이 어디를 건드릴지 스스로 고르는 능동 선택은 로봇이 있을 때의 확장이다.</dd>
+    <dd>사람 손으로 한 상호작용을 before/after로 촬영하고, 시뮬레이터에서 synthetic 실험을 한다. 로봇이 상호작용할 위치를 스스로 고르는 active selection은 로봇이 있을 때의 확장이다.</dd>
     <dt>왜 그래픽스 연구인가?</dt>
-    <dd>가설마다 시뮬레이션과 렌더링을 반복하므로 GPU 기반 시뮬레이션·렌더링의 효율이 중요하고, 관찰과 비교하는 분석-합성 과정은 렌더링 문제와 직결된다.</dd>
-    <dt>diffusion 같은 학습 방법은 왜 안 쓰나?</dt>
-    <dd>장면 수준 물리 분할 정답 데이터가 거의 없다. 먼저 병합 트리 후보로 충분한지 확인하고, 부족한 사례가 쌓이면 학습된 후보 제안기로 넣는다.</dd>
+    <dd>가설마다 시뮬레이션과 렌더링을 반복하므로 GPU 기반 simulation·rendering 효율이 중요하고, 관찰과 비교하는 analysis-by-synthesis 과정은 렌더링 문제와 직결된다.</dd>
+    <dt>Diffusion 같은 학습 기반 방법은 왜 쓰지 않나?</dt>
+    <dd>Scene 수준의 physical segmentation 정답 데이터가 거의 없다. 먼저 merge tree 후보로 충분한지 확인하고, 부족한 사례가 쌓이면 학습 기반 hypothesis 생성기를 추가한다.</dd>
   </dl>
 </section>
 
 <section id="roadmap">
-  <h2><span class="num">11</span>박사과정 로드맵</h2>
-  <p class="point">첫 논문의 "분할 가설 + 물리 검증" 틀을 그대로 두고, 아래 방향으로 넓힌다.</p>
+  <h2><span class="num">11</span>향후 연구</h2>
+  <p class="point">첫 논문의 "segmentation 가설 + 시뮬레이션 검증" 구조를 유지하면서 다음 방향으로 확장한다.</p>
   <ul>
-    <li><b>능동 상호작용</b>: 모호한 가설을 가장 잘 가르는 행동(밀기, 당기기, 들기)을 로봇이 스스로 고른다.</li>
-    <li><b>불확실성 유지</b>: 단일 분할 대신 여러 가설을 확률과 함께 유지하는 표현으로 확장한다.</li>
-    <li><b>과제별 분할</b>: 옮기기, 잡기, 변형 등 과제에 따라 필요한 단위가 다르다는 점을 다룬다.</li>
-    <li><b>변형체와 재질</b>: 변형 결합 관계를 넣고 KnockGS·PhysReal 같은 물성 추정과 합친다. sim-ready 연구 대부분이 강체만 다루므로 이 확장 자체가 차별점이 된다.</li>
-    <li><b>학습된 후보 제안기</b>: 병합 트리에 정답이 없는 사례가 쌓이면 diffusion 같은 생성 사전을 후보 제안기로 넣는다. 검증은 여전히 시뮬레이션이 맡는다.</li>
+    <li><b>Active interaction</b>: 모호한 가설을 가장 잘 구분하는 행동(밀기, 당기기, 들기)을 로봇이 스스로 선택한다.</li>
+    <li><b>Uncertainty 유지</b>: 하나의 segmentation 대신 여러 가설을 확률과 함께 유지하는 표현으로 확장한다.</li>
+    <li><b>Task-conditioned segmentation</b>: 옮기기, 잡기, 변형 등 task에 따라 필요한 단위가 다르다는 점을 다룬다.</li>
+    <li><b>Deformable·material</b>: Deformable relation을 추가하고 KnockGS·PhysReal 같은 physical parameter 추정과 결합한다. Sim-ready 연구 대부분이 rigid body만 다루므로 이 확장 자체가 차별점이 된다.</li>
+    <li><b>학습 기반 hypothesis 생성</b>: Merge tree에 정답이 없는 사례가 쌓이면 diffusion 같은 generative prior를 hypothesis 생성기로 추가한다. 검증은 계속 시뮬레이션이 맡는다.</li>
   </ul>
 </section>
 
 <section id="open">
-  <h2><span class="num">12</span>논의하고 싶은 점</h2>
+  <h2><span class="num">12</span>논의 사항</h2>
   <ul>
-    <li>첫 논문 범위를 강체와 부착·접촉 관계로 좁히는 것이 맞는지, 아니면 처음부터 변형체를 포함하는 것이 나은지</li>
-    <li>능동 상호작용을 위한 로봇 팔이나 촬영 장비를 언제부터 쓸 수 있는지</li>
-    <li>목표 학회를 그래픽스, 비전, 로보틱스 중 어디에 맞출지 (평가 비중이 달라짐)</li>
+    <li>첫 논문 범위를 rigid body와 attachment·contact relation으로 좁히는 것이 맞는지, 처음부터 deformable을 포함하는 것이 나은지</li>
+    <li>Active interaction을 위한 robot arm이나 촬영 장비를 언제부터 사용할 수 있는지</li>
+    <li>Target venue를 graphics, vision, robotics 중 어디에 맞출지 (평가 비중이 달라짐)</li>
   </ul>
 </section>
 
 <section id="refs">
-  <h2>출처</h2>
-  <p class="note">본문 표에 없는 논문만 적는다. 모두 2026년 10월에 검색으로 존재와 요지를 확인했고, 인용 전에 원문을 다시 읽어야 한다.</p>
+  <h2>참고 문헌</h2>
+  <p class="note">본문 표에 없는 논문만 적었다. 모두 2026년 10월에 검색으로 존재와 요지를 확인했으며, 인용 전에 원문을 다시 확인해야 한다.</p>
   <ul class="refs">
     <li><a href="https://arxiv.org/abs/2312.00860">Segment Any 3D Gaussians (SAGA)</a></li>
-    <li><a href="https://arxiv.org/abs/2603.06846">MotionBits</a>: 2D 비디오에서 강체 운동 단위 분할, MoRiBo 벤치마크</li>
-    <li><a href="https://arxiv.org/abs/2608.27365">KnockGS</a>: 상호작용 응답으로 탄성·밀도 보정</li>
-    <li><a href="https://arxiv.org/abs/2411.03706">3DGS-CD</a>: 재배치 전후 변화 감지</li>
-    <li><a href="https://arxiv.org/abs/2507.12465">PhysX-3D / PhysXNet</a>: 파트 단위 물리 주석 데이터</li>
-    <li><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Zhang_IAAO_Interactive_Affordance_Learning_for_Articulated_Objects_in_3D_Environments_CVPR_2025_paper.html">IAAO (CVPR'25)</a>: 상호작용을 통한 관절 물체 이해</li>
-    <li><a href="https://arxiv.org/abs/2403.01731">RISeg</a>: 로봇이 밀어서 하는 2D 분할</li>
-    <li><a href="https://openaccess.thecvf.com/content/ICCV2025/papers/Kreber_Guiding_Diffusion-Based_Articulated_Object_Generation_by_Partial_Point_Cloud_Alignment_ICCV_2025_paper.pdf">Kreber et al. (ICCV'25)</a>: 관찰에 맞춘 diffusion 관절 물체 생성</li>
-    <li><a href="https://arxiv.org/abs/2606.03994">SimuScene</a>: 단일 이미지, 물리 엔진을 진단 도구로 사용</li>
+    <li><a href="https://arxiv.org/abs/2603.06846">MotionBits</a>: 2D video의 rigid motion 단위 segmentation, MoRiBo benchmark</li>
+    <li><a href="https://arxiv.org/abs/2608.27365">KnockGS</a>: 상호작용 응답으로 elasticity·density 보정</li>
+    <li><a href="https://arxiv.org/abs/2411.03706">3DGS-CD</a>: rearrangement 전후 change detection</li>
+    <li><a href="https://arxiv.org/abs/2507.12465">PhysX-3D / PhysXNet</a>: part 단위 physical annotation 데이터</li>
+    <li><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Zhang_IAAO_Interactive_Affordance_Learning_for_Articulated_Objects_in_3D_Environments_CVPR_2025_paper.html">IAAO (CVPR'25)</a>: 상호작용을 통한 articulated object 이해</li>
+    <li><a href="https://arxiv.org/abs/2403.01731">RISeg</a>: 로봇 push 기반 2D segmentation</li>
+    <li><a href="https://openaccess.thecvf.com/content/ICCV2025/papers/Kreber_Guiding_Diffusion-Based_Articulated_Object_Generation_by_Partial_Point_Cloud_Alignment_ICCV_2025_paper.pdf">Kreber et al. (ICCV'25)</a>: 관찰에 맞춘 diffusion 기반 articulated object 생성</li>
+    <li><a href="https://arxiv.org/abs/2606.03994">SimuScene</a>: single image, 물리 엔진을 진단 도구로 사용</li>
   </ul>
 </section>
 </main>
